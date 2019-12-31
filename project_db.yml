@@ -1,0 +1,35 @@
+- hosts: db
+  vars:
+   x:
+    - mariadb-server.x86_64
+    - MySQL-python
+  tasks:
+    - name: installing mysql
+      package:
+       name: "{{ item }}"
+       state: present
+
+      with_items: "{{ x }}"
+    - name: service start
+      service:
+       name: mariadb
+       state: started
+       enabled: yes
+
+    - name: set root password
+      mysql_user:
+       user: root
+       password: redhat123
+       check_implicit_admin: yes
+       login_user: root
+       login_password: redhat123
+       state: present
+       
+
+    - name: delete anonyms users
+      mysql_user:
+        name: ''
+        host_all: yes
+        state: absent
+        login_user: root
+        login_password: redhat123

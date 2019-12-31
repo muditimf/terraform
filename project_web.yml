@@ -1,0 +1,18 @@
+- hosts: web
+  tasks:
+   - name: installing httpd
+     package:
+      name: httpd
+      state: present
+      use: yum
+
+   - name: coping file
+     copy:
+      src: /etc/ansible/index.html
+      dest: /var/www/html/  
+
+   - name: startiing service
+     service:
+      name: httpd
+      state: started
+      enabled: yes
